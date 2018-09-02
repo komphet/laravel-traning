@@ -13,7 +13,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('post.index');
+        $posts = [];
+        for($i = 1 ; $i <= 10 ; $i ++) array_push($posts, [
+            "id" => $i,
+            "title" => "Title".$i,
+            "content" => "Content".$i,
+        ]);
+        return view('post.index',compact('posts'));
     }
 
     /**
@@ -45,7 +51,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        return view('post.show');
+        return view('post.show')->with(compact('id'));
     }
 
     /**

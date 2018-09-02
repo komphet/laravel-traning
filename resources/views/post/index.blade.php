@@ -1,14 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Test</title>
-</head>
-<body>
-	<a href="{{route('post.create')}}">[Create Post]</a>
+@extends('layouts.main')
+
+@section('title')
+Post List
+@endsection
+
+@section('content')
+<a href="{{route('post.create')}}">[Create Post]</a>
+@include('post.sidebar')
 <ul>
-	@for($i = 1 ; $i <= 10 ; $i++)
-	<li>post {{$i}}<a href="{{route('post.show',$i)}}">[Show]</a><a href="{{route('post.edit',$i)}}">[Edit]</a></li>
-	@endfor
+	@forelse($posts as $index => $value)
+	<li>
+		{{$value['title']}}
+		@{{test}}
+		<a href="{{route('post.show',$value['id'])}}">[Show]</a>
+		<a href="{{route('post.edit',$value['id'])}}">[Edit]</a>
+	</li>
+	@empty
+	<li>No data</li>
+	@endforelse
 </ul>
-</body>
-</html>
+<a href="{{route('hello')}}">Go to Hello</a>
+@endsection
