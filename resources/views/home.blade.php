@@ -15,6 +15,7 @@
                     @endif
 
                     You are logged in!
+                    <p><a href="{{route('post.index')}}">[Post]</a></p>
                 </div>
             </div>
         </div>

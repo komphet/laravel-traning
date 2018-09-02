@@ -4,16 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Http\Requests\PostRequest;
 
 class PostController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:update-post,view-post');
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        if($request->q){
+            return $this->search($request->q);
+        }
 
         $posts = Post::all();
         return view('post.index',compact('posts'));
@@ -36,12 +47,19 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $post = Post::create([
+
+        $user = \Auth::user();
+
+        $user->posts()->create([
             'title' => $request->title,
-            'content' => $request->content
+            'content' => $request->content,
         ]);
+
+        // if ($request->hasFile('image')) 
+        //     $request->file('image')->move(public_path().'/img/',uniqid().".png");
+
         session()->flash('message', 'Create Post Success');
         return redirect()->route('post.index');
     }
@@ -78,14 +96,15 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
+
         $post = Post::find($id);
         $post->title = $request->title;
         $post->content = $request->content;
         $post->save();
         session()->flash('message', 'Update Post Success');
-        return redirect()->route('post.show',$id);
+        return redirect()->route('post.edit',$id);
     }
 
     /**
@@ -101,5 +120,15 @@ class PostController extends Controller
         session()->flash('message', 'Delete Post Success');
         return redirect()->route('post.index');
         // return view('post.index');
+    }
+
+
+    public function search($q)
+    {
+        $post = Post::where('title','like',"%$q%")->get();
+        return response()->json([
+            'statusCode' => '2001001',
+            'payload' => $post
+        ],200);
     }
 }

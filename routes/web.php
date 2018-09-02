@@ -20,6 +20,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/hello','HelloController@index')->name('hello');
-Route::resource('/post','PostController');
 
-
+Route::group(['middleware' => ['auth']],function(){
+	Route::resource('/post','PostController');
+	Route::resource('/comment','CommentController',['only' => ['update','store','destroy']]);
+});
