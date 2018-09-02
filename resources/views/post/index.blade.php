@@ -11,7 +11,6 @@ Post List
 	@forelse($posts as $index => $value)
 	<li>
 		{{$value['title']}}
-		@{{test}}
 		<a href="{{route('post.show',$value['id'])}}">[Show]</a>
 		<a href="{{route('post.edit',$value['id'])}}">[Edit]</a>
 	</li>

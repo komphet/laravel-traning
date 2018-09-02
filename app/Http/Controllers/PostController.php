@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Post;
 
 class PostController extends Controller
 {
@@ -13,12 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = [];
-        for($i = 1 ; $i <= 10 ; $i ++) array_push($posts, [
-            "id" => $i,
-            "title" => "Title".$i,
-            "content" => "Content".$i,
-        ]);
+        $posts = Post::all();
         return view('post.index',compact('posts'));
     }
 
@@ -29,7 +25,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('post.create');
+        $post = null;
+        return view('post.create',compact('post'));
     }
 
     /**
@@ -40,7 +37,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        return view('post.index');
+        $post = Post::create([
+            'title' => $request->title,
+            'content' => $request->content
+        ]);
+
+        return redirect()->route('post.index');
     }
 
     /**
@@ -51,7 +53,9 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        return view('post.show')->with(compact('id'));
+        $post = Post::find($id);
+
+        return view('post.show')->with(compact('post'));
     }
 
     /**
@@ -62,7 +66,8 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        return view('post.create');
+        $post = Post::find($id);
+        return view('post.create',compact('post'));
     }
 
     /**
@@ -74,7 +79,11 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return view('post.show');
+        $post = Post::find($id);
+        $post->title = $request->title;
+        $post->content = $request->content;
+        $post->save();
+        return redirect()->route('post.show',$id);
     }
 
     /**
@@ -85,7 +94,9 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        return "delete";
+        $post = Post::find($id);
+        $post->delete();
+        return redirect()->route('post.index');
         // return view('post.index');
     }
 }

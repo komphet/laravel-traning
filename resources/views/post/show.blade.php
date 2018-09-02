@@ -1,16 +1,16 @@
 @extends('layouts.main')
 
 @section('title')
-Post Show {{$id}}
+{{$post->title}}
 @endsection
 
 @section('content')
-<h1>Show Post {{$id}}</h1>
-<p>This is a show post</p>
+<h1>{{$post->title}}</h1>
+<p>{{$post->content}}</p>
 <a href="{{route('post.index')}}">[Back]</a>
-<form method="post" action="{{route('post.destroy',1)}}">
+<form method="post" action="{{route('post.destroy',$post->id)}}">
 	{{ csrf_field() }}
 	{{ method_field("delete") }}
-	<button type="submit">Delete</button>
+	<button onclick="return confirm('Do you want to delete?');" type="submit">Delete</button>
 </form>
 @endsection
