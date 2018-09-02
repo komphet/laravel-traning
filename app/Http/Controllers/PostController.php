@@ -14,6 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
+
         $posts = Post::all();
         return view('post.index',compact('posts'));
     }
@@ -41,7 +42,7 @@ class PostController extends Controller
             'title' => $request->title,
             'content' => $request->content
         ]);
-
+        session()->flash('message', 'Create Post Success');
         return redirect()->route('post.index');
     }
 
@@ -83,6 +84,7 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->content = $request->content;
         $post->save();
+        session()->flash('message', 'Update Post Success');
         return redirect()->route('post.show',$id);
     }
 
@@ -96,6 +98,7 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         $post->delete();
+        session()->flash('message', 'Delete Post Success');
         return redirect()->route('post.index');
         // return view('post.index');
     }

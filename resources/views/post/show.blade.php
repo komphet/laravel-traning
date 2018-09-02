@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+@include('post.message')
 <h1>{{$post->title}}</h1>
 <p>{{$post->content}}</p>
 <a href="{{route('post.index')}}">[Back]</a>

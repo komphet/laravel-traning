@@ -5,6 +5,8 @@ Post List
 @endsection
 
 @section('content')
+@include('post.message')
+
 <a href="{{route('post.create')}}">[Create Post]</a>
 @include('post.sidebar')
 <ul>
